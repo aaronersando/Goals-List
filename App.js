@@ -6,6 +6,11 @@ import GoalInput from "./components/GoalInput";
 
 export default function App() {
   const [goalList, setGoalList] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const handleChangeModalVisible = () => {
+    setIsModalVisible((prevVisible) => !prevVisible);
+  };
 
   const handleAddGoal = (goalText) => {
     setGoalList((prevList) => [
@@ -20,7 +25,13 @@ export default function App() {
 
   return (
     <View style={styles.appContainer}>
-      <GoalInput onAddGoal={handleAddGoal} />
+      {isModalVisible && (
+        <GoalInput
+          onAddGoal={handleAddGoal}
+          onToggleModal={handleChangeModalVisible}
+          visible={isModalVisible}
+        />
+      )}
       <View style={styles.goalsContainer}>
         <FlatList
           data={goalList}
@@ -38,6 +49,11 @@ export default function App() {
           }}
         />
       </View>
+      <Button
+        color={"#5e0acc"}
+        title="Add New Goal"
+        onPress={handleChangeModalVisible}
+      />
     </View>
   );
 }
@@ -45,8 +61,9 @@ export default function App() {
 const styles = StyleSheet.create({
   appContainer: {
     flex: 1,
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 16,
+    paddingBottom: 26,
   },
   goalsContainer: {
     flex: 7,
